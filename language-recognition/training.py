@@ -3,11 +3,10 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.naive_bayes import GaussianNB
 from sklearn.feature_extraction.text import CountVectorizer
 
 # read in the csv, r means raw string, dont treat "\" as an escape character
-data = pd.read_csv(r'C:\Users\Eric\Desktop\text-recognition\language-recognition\training_language_dataset.csv')
+data = pd.read_csv(r'C:\Users\Eric\Desktop\language-recognition\language-recognition\training_language_dataset.csv')
 
 # break the dataframe columns into two arrays
 text = np.array(data["Text"])
@@ -23,17 +22,16 @@ TEXT = cv.fit_transform(text)
 # frac is the fraction of the dataset to return, so 1 means all. data.sample(frac=0.2)
 # drop=True prevents reset_index from creating a new column containing the old indices
 # give 20% to testValidate, random_state will gurantee the same data split each time for reproduceable results
-TEXT_train, TEXT_test, lang_train, lang_test = train_test_split(TEXT, lang, test_size=0.2, random_state=0)
+TEXT_train, TEXT_test, lang_train, lang_test = train_test_split(TEXT, lang, test_size=0.05, random_state=42)
 
 # the multinomial naive bayes algorithm.
-#model = MultinomialNB()
-model = GaussianNB
+model = MultinomialNB()
 
 # essentially feeding the model the data, the input and expected output 
 model.fit(TEXT_train, lang_train)
 
 # the accuracy on the test data 
-# print(model.score(TEXT_test, lang_test))
+print(model.score(TEXT_test, lang_test))
 
 input = input("Enter Something: ")
 
